@@ -58,6 +58,9 @@ class _AuthFormState extends State<AuthForm> {
                       key: ValueKey('name'),
                       decoration: InputDecoration(labelText: 'Nome'),
                       initialValue: _authData.name,
+                      autocorrect: true,
+                      textCapitalization: TextCapitalization.words,
+                      enableSuggestions: false,
                       onChanged: (value) => _authData.name = value,
                       validator: (value) {
                         if (value == null || value.trim().length < 4)
@@ -68,6 +71,9 @@ class _AuthFormState extends State<AuthForm> {
                   TextFormField(
                     key: ValueKey('email'),
                     decoration: InputDecoration(labelText: 'E-mail'),
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.none,
+                    enableSuggestions: false,
                     onChanged: (value) => _authData.email = value,
                     validator: (value) {
                       if (value == null || !value.contains('@'))
