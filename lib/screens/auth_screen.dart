@@ -17,7 +17,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isLoading = false;
 
   Future<void> _handleSubmit(AuthData authData) async {
-    AuthResult _authResult;
+    UserCredential userCredential;
 
     setState(() {
       _isLoading = true;
@@ -30,7 +30,7 @@ class _AuthScreenState extends State<AuthScreen> {
           password: authData.password,
         );
       } else {
-        _authResult = await _firebaseAuth.createUserWithEmailAndPassword(
+        userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: authData.email.trim(),
           password: authData.password,
         );
@@ -38,9 +38,9 @@ class _AuthScreenState extends State<AuthScreen> {
         final ref = FirebaseStorage.instance
             .ref()
             .child('user_images')
-            .child(_authResult.user.uid + '.jpg');
+            .child(userCredential.user.uid + '.jpg');
 
-        await ref.putFile(authData.image).onComplete;
+        await ref.putFile(authData.image);
         final imageUrl = await ref.getDownloadURL();
 
         final userData = {
@@ -49,10 +49,10 @@ class _AuthScreenState extends State<AuthScreen> {
           'imageUrl': imageUrl,
         };
 
-        await Firestore.instance
+        await FirebaseFirestore.instance
             .collection('users')
-            .document(_authResult.user.uid)
-            .setData(userData);
+            .doc(userCredential.user.uid)
+            .set(userData);
       }
     } on PlatformException catch (error) {
       final msg = error.message ?? 'Ocorreu um erro! Verifique as credenciais.';
