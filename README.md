@@ -1,4 +1,4 @@
-# Chat Flutter
+# Flutter Chat
 
 > Projeto desenvolvido com Flutter que demonstra como trabalhar com Firebase, Upload Imagem, Push Notifications e Cloud Functions.
 
